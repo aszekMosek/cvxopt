@@ -5,6 +5,7 @@ except ImportError:
 from glob import glob
 import os
 import sys
+import versioneer
 
 # Modifiy this if BLAS and LAPACK libraries are not in /usr/lib.
 BLAS_LIB_DIR = '/usr/lib'
@@ -230,7 +231,8 @@ extmods += [base, blas, lapack, umfpack, cholmod, amd, misc_solvers]
 
 setup (name = 'cvxopt',
     description = 'Convex optimization package',
-    version = '1.1.8',
+    version=versioneer.get_version(),
+    cmdclass=versioneer.get_cmdclass(),
     long_description = '''
 CVXOPT is a free software package for convex optimization based on the
 Python programming language. It can be used with the interactive Python

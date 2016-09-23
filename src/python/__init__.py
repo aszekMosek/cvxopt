@@ -258,3 +258,7 @@ __all__ = [ 'blas', 'lapack', 'amd', 'umfpack', 'cholmod', 'solvers',
     'modeling', 'printing', 'info', 'matrix', 'spmatrix', 'sparse', 
     'spdiag', 'sqrt', 'sin', 'cos', 'exp', 'log', 'min', 'max', 'mul', 
     'div', 'normal', 'uniform', 'setseed', 'getseed' ]
+
+from ._version import get_versions
+__version__ = get_versions()['version']
+del get_versions
