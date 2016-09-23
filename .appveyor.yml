@@ -1,65 +1,62 @@
+version: 1.1.8.{build}-{branch}
+configuration: Release
+platform: x64
+clone_folder: C:\projects\cvxopt
+init:
+- ps: "if (-not(Test-Path C:\\projects\\dl)) {New-Item -ItemType directory -Path C:\\projects\\dl}\n\n# Download OpenBLAS 32-bit\n$source = \"https://bitbucket.org/carlkl/mingw-w64-for-python/downloads/OpenBLAS-0.2.17_win32.7z\"\n$destination = \"C:\\projects\\dl\\OpenBLAS-0.2.17_win32.7z\"\nif (-not(Test-Path $destination)) {Invoke-WebRequest $source -OutFile $destination}\n& 'C:\\Program Files\\7-Zip\\7z' e $destination -oC:\\projects\\openblas32 -y\n\n# Download OpenBLAS 64-bit\n$source = \"https://bitbucket.org/carlkl/mingw-w64-for-python/downloads/OpenBLAS-0.2.17_amd64.7z\"\n$destination = \"C:\\projects\\dl\\OpenBLAS-0.2.17_amd64.7z\"\nif (-not(Test-Path $destination)) {Invoke-WebRequest $source -OutFile $destination}\n& 'C:\\Program Files\\7-Zip\\7z' e $destination -oC:\\projects\\openblas64 -y\n\n# Download libpython-cp27 32-bit\n$source = \"https://bitbucket.org/carlkl/mingw-w64-for-python/downloads/libpython-cp27-none-win32.7z\"\n$destination = \"C:\\projects\\dl\\libpython-cp27-win32.7z\"\nif (-not(Test-Path $destination)) {Invoke-WebRequest $source -OutFile $destination}\n& 'C:\\Program Files\\7-Zip\\7z' e $destination -oC:\\projects -y\n\n# Download libpython-cp27 64-bit\n$source = \"https://bitbucket.org/carlkl/mingw-w64-for-python/downloads/libpython-cp27-none-win_amd64.7z\"\n$destination = \"C:\\projects\\dl\\libpython-cp27-win64.7z\"\nif (-not(Test-Path $destination)) {Invoke-WebRequest $source -OutFile $destination}\n& 'C:\\Program Files\\7-Zip\\7z' e $destination -oC:\\projects -y\n\n# Download libpython-cp34 32-bit\n$source = \"https://bitbucket.org/carlkl/mingw-w64-for-python/downloads/libpython-cp34-none-win32.7z\"\n$destination = \"C:\\projects\\dl\\libpython-cp34-win32.7z\"\nif (-not(Test-Path $destination)) {Invoke-WebRequest $source -OutFile $destination}\n& 'C:\\Program Files\\7-Zip\\7z' e $destination -oC:\\projects -y\n\n# Download libpython-cp34 64-bit\n$source = \"https://bitbucket.org/carlkl/mingw-w64-for-python/downloads/libpython-cp34-none-win_amd64.7z\"\n$destination = \"C:\\projects\\dl\\libpython-cp34-win64.7z\"\nif (-not(Test-Path $destination)) {Invoke-WebRequest $source -OutFile $destination}\n& 'C:\\Program Files\\7-Zip\\7z' e $destination -oC:\\projects -y\n   \n# Download Mingwpy (vc90) 32-bit\n$source = \"https://bitbucket.org/carlkl/mingw-w64-for-python/downloads/mingwpy_win32_vc90.7z\"\n$destination = \"C:\\projects\\dl\\mingw_win32_vc90.7z\"\nif (-not(Test-Path $destination)) {Invoke-WebRequest $source -OutFile $destination}\n& 'C:\\Program Files\\7-Zip\\7z' e $destination -oC:\\projects\\mingwpy32vc90 -y \n\n# Download Mingwpy (vc90) 64-bit\n$source = \"https://bitbucket.org/carlkl/mingw-w64-for-python/downloads/mingwpy_amd64_vc90.7z\"\n$destination = \"C:\\projects\\dl\\mingw_amd64_vc90.7z\"\nif (-not(Test-Path $destination)) {Invoke-WebRequest $source -OutFile $destination}\n& 'C:\\Program Files\\7-Zip\\7z' e $destination -oC:\\projects\\mingwpy64vc90 -y \n\n# Download Mingwpy (vc100) 32-bit\n$source = \"https://bitbucket.org/carlkl/mingw-w64-for-python/downloads/mingwpy_win32_vc100.7z\"\n$destination = \"C:\\projects\\dl\\mingw_win32_vc100.7z\"\nif (-not(Test-Path $destination)) {Invoke-WebRequest $source -OutFile $destination}\n& 'C:\\Program Files\\7-Zip\\7z' e $destination -oC:\\projects\\mingwpy32vc100 -y \n\n# Download Mingwpy (vc100) 64-bit\n$source = \"https://bitbucket.org/carlkl/mingw-w64-for-python/downloads/mingwpy_amd64_vc100.7z\"\n$destination = \"C:\\projects\\dl\\mingw_amd64_vc100.7z\"\nif (-not(Test-Path $destination)) {Invoke-WebRequest $source -OutFile $destination}\n& 'C:\\Program Files\\7-Zip\\7z' e $destination -oC:\\projects\\mingwpy64vc100 -y \n\n# Download GLPK\n$source = \"http://ftp.gnu.org/gnu/glpk/glpk-4.60.tar.gz\"\n$destination = \"C:\\projects\\dl\\glpk-4.60.tar.gz\"\nif (-not(Test-Path $destination)) {Invoke-WebRequest $source -OutFile $destination}\n\n# Download GSL\n$source = \"http://mirrors.dotsrc.org/gnu/gsl/gsl-2.2.tar.gz\"\n$destination = \"C:\\projects\\dl\\gsl-2.2.tar.gz\"\nif (-not(Test-Path $destination)) {Invoke-WebRequest $source -OutFile $destination}\n\n# Download FFTW\n$source = \"http://www.fftw.org/fftw-3.3.5.tar.gz\"\n$destination = \"C:\\projects\\dl\\fftw-3.3.5.tar.gz\"\nif (-not(Test-Path $destination)) {Invoke-WebRequest $source -OutFile $destination}\n\n# Download DSDP\n$source = \"http://www.mcs.anl.gov/hs/software/DSDP/DSDP5.8.tar.gz\"\n$destination = \"C:\\projects\\dl\\dsdp-5.8.tar.gz\"\nif (-not(Test-Path $destination)) {Invoke-WebRequest $source -OutFile $destination}"
 environment:
-  global:
-    CVXOPT_BLAS_LIB: "openblas"
-    CVXOPT_LAPACK_LIB: "openblas"
-    CVXOPT_BLAS_LIB_DIR: "C:\\projects\\cvxopt\\OpenBLAS.0.2.14.1\\lib\\native\\lib\\win32"
-
+  CVXOPT_BLAS_LIB: openblaspy
+  CVXOPT_LAPACK_LIB: openblaspy
+  CVXOPT_BLAS_EXTRA_LINK_ARGS: -lgfortran
+  LIBS_DIR: C:\projects\libs
   matrix:
-
-    # For Python versions available on Appveyor, see
-    # http://www.appveyor.com/docs/installed-software#python
-    - PYTHON: "C:\\Python27"
-
+  - PYTHON: C:\Python27
+    PYTHON_ARCH: 32
+    PYTHON_VERSION: 27
+    CFLAGS: -IC:/projects/mingwpy32vc90/i686-w64-mingw32/include
+    LDFLAGS: -LC:/projects/mingwpy32vc90/i686-w64-mingw32/lib
+    MINGWPY_DIR: C:\projects\mingwpy32vc90
+    CVXOPT_BLAS_LIB_DIR: C:\projects\openblas32
+  - PYTHON: C:\Python27-x64
+    PYTHON_ARCH: 64
+    PYTHON_VERSION: 27
+    CFLAGS: -IC:/projects/mingwpy64vc90/i686-w64-mingw32/include
+    LDFLAGS: -LC:/projects/mingwpy64vc90/i686-w64-mingw32/lib
+    MINGWPY_DIR: C:\projects\mingwpy64vc90
+    CVXOPT_BLAS_LIB_DIR: C:\projects\openblas64
+  - PYTHON: C:\Python34-x64
+    PYTHON_ARCH: 64
+    PYTHON_VERSION: 34
+    CFLAGS: -IC:/projects/mingwpy64vc100/i686-w64-mingw32/include
+    LDFLAGS: -LC:/projects/mingwpy64vc100/i686-w64-mingw32/lib
+    MINGWPY_DIR: C:\projects\mingwpy64vc100
+    CVXOPT_BLAS_LIB_DIR: C:\projects\openblas64
 install:
-  # We need wheel installed to build wheels
-  - set PATH=%PATH%;C:\mingw-w64\i686-5.3.0-posix-dwarf-rt_v4-rev0\mingw32\bin;%PYTHON%;%PYTHON%\Scripts
-  - pip install wheel
-  - nuget install OpenBLAS
-  - dir %CVXOPT_BLAS_LIB_DIR%
-  - python setup.py config --compiler=mingw32
-  - python setup.py build --compiler=mingw32
-  - python setup.py install
+- cmd: >-
+    set PATH=%PYTHON%;%PYTHON%\Scripts;%MINGWPY_DIR%;%CVXOPT_BLAS_LIB_DIR%;%LIBS_DIR%
 
-build: off
+    dir C:\projects\cvxopt
 
+    python --version
+
+    python -c "import struct; print(struct.calcsize('P') * 8)"
+
+    pip install --disable-pip-version-check --user --upgrade pip
+
+    pip install -i https://pypi.anaconda.org/carlkl/simple mingwpy
+
+    pip install wheel
+cache: C:\projects\dl
+build_script:
+- cmd: >-
+    python setup.py config --compiler=mingw32
+
+    python setup.py build --compiler=mingw32
+
+    python setup.py install
+
+    python setup.py bdist_wheel
 test_script:
-  # Put your test command here.
-  # If you don't need to build C extensions on 64-bit Python 3.3 or 3.4,
-  # you can remove "build.cmd" from the front of the command, as it's
-  # only needed to support those cases.
-  # Note that you must use the environment variable %PYTHON% to refer to
-  # the interpreter you're using - Appveyor does not do anything special
-  # to put the Python version you want to use on PATH.
-  - python -vv -c "from cvxopt import blas,lapack,cholmod,umfpack"
-  - python examples/book/chap6/basispursuit.py 
-  - python examples/doc/chap8/conelp.py
-  - python examples/doc/chap8/coneqp.py
-  - python examples/doc/chap8/lp.py
-  - python examples/doc/chap8/socp.py
-  - python examples/doc/chap8/sdp.py
-  - python examples/doc/chap8/mcsdp.py
-  - python examples/doc/chap8/l1.py
-  - python examples/doc/chap8/l1regls.py
-  - python examples/doc/chap9/gp.py
-  - python examples/doc/chap9/acent.py 
-  - python examples/doc/chap9/acent2.py 
-  - python examples/doc/chap9/l2ac.py
-  - python examples/doc/chap10/lp.py
-  - python examples/doc/chap10/roblp.py
-  - python examples/doc/chap10/l1svc.py
-
-after_test:
-  # This step builds your wheels.
-  # Again, you only need build.cmd if you're building C extensions for
-  # 64-bit Python 3.3/3.4. And you need to use %PYTHON% to get the correct
-  # interpreter
-  - "%PYTHON%\\python.exe setup.py bdist_wheel"
-
+- cmd: "python -c \"from cvxopt import blas,lapack,cholmod,umfpack\"\ncd C:\\projects\\cvxopt\npython examples\\book\\chap6\\basispursuit.py \npython examples\\doc\\chap8\\conelp.py\npython examples\\doc\\chap8\\coneqp.py\npython examples\\doc\\chap8\\lp.py\npython examples\\doc\\chap8\\socp.py\npython examples\\doc\\chap8\\sdp.py\npython examples\\doc\\chap8\\mcsdp.py\npython examples\\doc\\chap8\\l1.py\npython examples\\doc\\chap8\\l1regls.py\npython examples\\doc\\chap9\\gp.py\npython examples\\doc\\chap9\\acent.py \npython examples\\doc\\chap9\\acent2.py \npython examples\\doc\\chap9\\l2ac.py\npython examples\\doc\\chap10\\lp.py\npython examples\\doc\\chap10\\roblp.py\npython examples\\doc\\chap10\\l1svc.py"
 artifacts:
-  # bdist_wheel puts your built wheel in the dist directory
-  - path: dist\*
-
-#on_success:
-#  You can use this step to upload your artifacts to a public website.
-#  See Appveyor's documentation for more details. Or you can simply
-#  access your wheels from the Appveyor "artifacts" tab for your build.
+- path: dist/*.whl
