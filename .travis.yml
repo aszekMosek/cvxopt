@@ -38,23 +38,9 @@ before_install:
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then source venv/bin/activate; fi
 
 install:
+  - if [[ "$TRAVIS_OS_NAME" == "linux" && "$TRAVIS_PYTHON_VERSION" == "2.7" ]]; then pip install coveralls; fi
   - pip install git+https://github.com/cvxopt/cvxopt@dev
 
-script: 
+script:
   - python -c 'from cvxopt import blas,lapack,glpk,fftw,dsdp,gsl,cholmod,umfpack'
-  - python examples/book/chap6/basispursuit.py 
-  - python examples/doc/chap8/conelp.py
-  - python examples/doc/chap8/coneqp.py
-  - python examples/doc/chap8/lp.py
-  - python examples/doc/chap8/socp.py
-  - python examples/doc/chap8/sdp.py
-  - python examples/doc/chap8/mcsdp.py
-  - python examples/doc/chap8/l1.py
-  - python examples/doc/chap8/l1regls.py
-  - python examples/doc/chap9/gp.py
-  - python examples/doc/chap9/acent.py 
-  - python examples/doc/chap9/acent2.py 
-  - python examples/doc/chap9/l2ac.py
-  - python examples/doc/chap10/lp.py
-  - python examples/doc/chap10/roblp.py
-  - python examples/doc/chap10/l1svc.py
+  - if [[ "$TRAVIS_OS_NAME" == "linux" && "$TRAVIS_PYTHON_VERSION" == "2.7" ]]; then nosetests --with-coverage --cover-package=cvxopt; else nosetests; fi

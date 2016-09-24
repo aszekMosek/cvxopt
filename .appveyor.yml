@@ -46,6 +46,10 @@ install:
     pip install -i https://pypi.anaconda.org/carlkl/simple mingwpy
 
     pip install wheel
+
+    pip install nose
+
+    pip install coveralls
 cache: C:\projects\dl
 build_script:
 - cmd: >-
@@ -57,6 +61,6 @@ build_script:
 
     python setup.py bdist_wheel
 test_script:
-- cmd: "python -c \"from cvxopt import blas,lapack,cholmod,umfpack\"\ncd C:\\projects\\cvxopt\npython examples\\book\\chap6\\basispursuit.py \npython examples\\doc\\chap8\\conelp.py\npython examples\\doc\\chap8\\coneqp.py\npython examples\\doc\\chap8\\lp.py\npython examples\\doc\\chap8\\socp.py\npython examples\\doc\\chap8\\sdp.py\npython examples\\doc\\chap8\\mcsdp.py\npython examples\\doc\\chap8\\l1.py\npython examples\\doc\\chap8\\l1regls.py\npython examples\\doc\\chap9\\gp.py\npython examples\\doc\\chap9\\acent.py \npython examples\\doc\\chap9\\acent2.py \npython examples\\doc\\chap9\\l2ac.py\npython examples\\doc\\chap10\\lp.py\npython examples\\doc\\chap10\\roblp.py\npython examples\\doc\\chap10\\l1svc.py"
+- cmd: "python -c \"from cvxopt import blas,lapack,cholmod,umfpack\"\ncd C:\\projects\\cvxopt\nnnosetests"
 artifacts:
 - path: dist/*.whl

@@ -155,16 +155,16 @@ def max(*args):
     
     if len(args) == 1 and type(args[0]).__name__ in \
             ['list', 'tuple', 'xrange', 'range', 'generator']: 
-        return +reduce(base.emax, *args)
-    elif len(args) == 1 and type(args[0]) is base.matrix:
+        return +reduce(cvxopt.base.emax, *args)
+    elif len(args) == 1 and type(args[0]) is cvxopt.base.matrix:
         return omax(args[0])
-    elif len(args) == 1 and type(args[0]) is base.spmatrix:
+    elif len(args) == 1 and type(args[0]) is cvxopt.base.spmatrix:
         if len(args[0]) == mul(args[0].size):
             return omax(args[0])
         else:
             return omax(omax(args[0]), 0.0)
     else:
-        return +reduce(base.emax, args)
+        return +reduce(cvxopt.base.emax, args)
 
 
 def min(*args):
@@ -184,16 +184,16 @@ def min(*args):
 
     if len(args) == 1 and type(args[0]).__name__ in \
             ['list', 'tuple', 'xrange', 'range', 'generator']: 
-        return +reduce(base.emin, *args)
-    elif len(args) == 1 and type(args[0]) is base.matrix:
+        return +reduce(cvxopt.base.emin, *args)
+    elif len(args) == 1 and type(args[0]) is cvxopt.base.matrix:
         return omin(args[0])
-    elif len(args) == 1 and type(args[0]) is base.spmatrix:
+    elif len(args) == 1 and type(args[0]) is cvxopt.base.spmatrix:
         if len(args[0]) == mul(args[0].size):
             return omin(args[0])
         else:
             return omin(omin(args[0]), 0.0)
     else:
-        return +reduce(base.emin, args)
+        return +reduce(cvxopt.base.emin, args)
 
 def mul(*args):
     ''' 
@@ -213,9 +213,9 @@ def mul(*args):
 
     if len(args) == 1 and type(args[0]).__name__ in \
             ['list', 'tuple', 'xrange', 'range', 'generator']: 
-        return +reduce(base.emul, *args)
+        return +reduce(cvxopt.base.emul, *args)
     else:
-        return +reduce(base.emul, args)
+        return +reduce(cvxopt.base.emul, args)
 
 def div(*args):
     ''' 
@@ -235,13 +235,13 @@ def div(*args):
 
     if len(args) == 1 and type(args[0]).__name__ in \
             ['list', 'tuple', 'xrange', 'range', 'generator']: 
-        return +reduce(base.ediv, *args)
+        return +reduce(cvxopt.base.ediv, *args)
     else:
-        return +reduce(base.ediv, args)
+        return +reduce(cvxopt.base.ediv, args)
 
-base.normal, base.uniform = normal, uniform
-base.setseed, base.getseed = setseed, getseed
-base.mul, base.div = mul, div
+cvxopt.base.normal, cvxopt.base.uniform = normal, uniform
+cvxopt.base.setseed, cvxopt.base.getseed = setseed, getseed
+cvxopt.base.mul, cvxopt.base.div = mul, div
 
 from cvxopt import printing
 matrix_str    = printing.matrix_str_default
