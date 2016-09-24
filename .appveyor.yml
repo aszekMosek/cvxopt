@@ -61,6 +61,6 @@ build_script:
 
     python setup.py bdist_wheel
 test_script:
-- cmd: "python -c \"from cvxopt import blas,lapack,cholmod,umfpack\"\ncd C:\\projects\\cvxopt\nnnosetests"
+- cmd: "python -c \"from cvxopt import blas,lapack,cholmod,umfpack\"\ncd C:\\projects\\cvxopt\nnosetests"
 artifacts:
 - path: dist/*.whl
