@@ -72,9 +72,11 @@ BLAS_LIB = os.environ.get("CVXOPT_BLAS_LIB",BLAS_LIB)
 LAPACK_LIB = os.environ.get("CVXOPT_LAPACK_LIB",LAPACK_LIB)
 BLAS_LIB_DIR = os.environ.get("CVXOPT_BLAS_LIB_DIR",BLAS_LIB_DIR)
 BLAS_EXTRA_LINK_ARGS = os.environ.get("CVXOPT_BLAS_EXTRA_LINK_ARGS",BLAS_EXTRA_LINK_ARGS)
+DATA_FILES = os.environ.get("CVXOPT_DATA_FILES",[])
 if type(BLAS_LIB) is str: BLAS_LIB = BLAS_LIB.strip().split(';')
 if type(LAPACK_LIB) is str: LAPACK_LIB = LAPACK_LIB.strip().split(';')
 if type(BLAS_EXTRA_LINK_ARGS) is str: BLAS_EXTRA_LINK_ARGS = BLAS_EXTRA_LINK_ARGS.strip().split(';')
+if type(DATA_FILES) is str: DATA_FILES = DATA_FILES.strip().split(';')
 BUILD_GSL = int(os.environ.get("CVXOPT_BUILD_GSL",BUILD_GSL))
 GSL_LIB_DIR = os.environ.get("CVXOPT_GSL_LIB_DIR",GSL_LIB_DIR)
 GSL_INC_DIR = os.environ.get("CVXOPT_GSL_INC_DIR",GSL_INC_DIR)
@@ -250,6 +252,7 @@ language.''',
     ext_modules = extmods,
     package_dir = {"cvxopt": "src/python"},
     packages = ["cvxopt"],
+    data_files = [("cvxopt",DATA_FILES)],
     classifiers=[
         'Development Status :: 5 - Production/Stable',
         'Intended Audience :: Science/Research',
