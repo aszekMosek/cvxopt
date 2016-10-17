@@ -3,64 +3,46 @@ configuration: Release
 platform: x64
 clone_folder: C:\projects\cvxopt
 init:
-- ps: "if (-not(Test-Path C:\\projects\\dl)) {New-Item -ItemType directory -Path C:\\projects\\dl}\n\n# Download OpenBLAS 32-bit\n$source = \"https://bitbucket.org/carlkl/mingw-w64-for-python/downloads/OpenBLAS-0.2.17_win32.7z\"\n$destination = \"C:\\projects\\dl\\OpenBLAS-0.2.17_win32.7z\"\nif (-not(Test-Path $destination)) {Invoke-WebRequest $source -OutFile $destination}\n& 'C:\\Program Files\\7-Zip\\7z' e $destination -oC:\\projects\\openblas32 -y\n\n# Download OpenBLAS 64-bit\n$source = \"https://bitbucket.org/carlkl/mingw-w64-for-python/downloads/OpenBLAS-0.2.17_amd64.7z\"\n$destination = \"C:\\projects\\dl\\OpenBLAS-0.2.17_amd64.7z\"\nif (-not(Test-Path $destination)) {Invoke-WebRequest $source -OutFile $destination}\n& 'C:\\Program Files\\7-Zip\\7z' e $destination -oC:\\projects\\openblas64 -y\n\n# Download libpython-cp27 32-bit\n$source = \"https://bitbucket.org/carlkl/mingw-w64-for-python/downloads/libpython-cp27-none-win32.7z\"\n$destination = \"C:\\projects\\dl\\libpython-cp27-win32.7z\"\nif (-not(Test-Path $destination)) {Invoke-WebRequest $source -OutFile $destination}\n& 'C:\\Program Files\\7-Zip\\7z' e $destination -oC:\\projects -y\n\n# Download libpython-cp27 64-bit\n$source = \"https://bitbucket.org/carlkl/mingw-w64-for-python/downloads/libpython-cp27-none-win_amd64.7z\"\n$destination = \"C:\\projects\\dl\\libpython-cp27-win64.7z\"\nif (-not(Test-Path $destination)) {Invoke-WebRequest $source -OutFile $destination}\n& 'C:\\Program Files\\7-Zip\\7z' e $destination -oC:\\projects -y\n\n# Download libpython-cp34 32-bit\n$source = \"https://bitbucket.org/carlkl/mingw-w64-for-python/downloads/libpython-cp34-none-win32.7z\"\n$destination = \"C:\\projects\\dl\\libpython-cp34-win32.7z\"\nif (-not(Test-Path $destination)) {Invoke-WebRequest $source -OutFile $destination}\n& 'C:\\Program Files\\7-Zip\\7z' e $destination -oC:\\projects -y\n\n# Download libpython-cp34 64-bit\n$source = \"https://bitbucket.org/carlkl/mingw-w64-for-python/downloads/libpython-cp34-none-win_amd64.7z\"\n$destination = \"C:\\projects\\dl\\libpython-cp34-win64.7z\"\nif (-not(Test-Path $destination)) {Invoke-WebRequest $source -OutFile $destination}\n& 'C:\\Program Files\\7-Zip\\7z' e $destination -oC:\\projects -y\n   \n# Download Mingwpy (vc90) 32-bit\n$source = \"https://bitbucket.org/carlkl/mingw-w64-for-python/downloads/mingwpy_win32_vc90.7z\"\n$destination = \"C:\\projects\\dl\\mingw_win32_vc90.7z\"\nif (-not(Test-Path $destination)) {Invoke-WebRequest $source -OutFile $destination}\n& 'C:\\Program Files\\7-Zip\\7z' e $destination -oC:\\projects\\mingwpy32vc90 -y \n\n# Download Mingwpy (vc90) 64-bit\n$source = \"https://bitbucket.org/carlkl/mingw-w64-for-python/downloads/mingwpy_amd64_vc90.7z\"\n$destination = \"C:\\projects\\dl\\mingw_amd64_vc90.7z\"\nif (-not(Test-Path $destination)) {Invoke-WebRequest $source -OutFile $destination}\n& 'C:\\Program Files\\7-Zip\\7z' e $destination -oC:\\projects\\mingwpy64vc90 -y \n\n# Download Mingwpy (vc100) 32-bit\n$source = \"https://bitbucket.org/carlkl/mingw-w64-for-python/downloads/mingwpy_win32_vc100.7z\"\n$destination = \"C:\\projects\\dl\\mingw_win32_vc100.7z\"\nif (-not(Test-Path $destination)) {Invoke-WebRequest $source -OutFile $destination}\n& 'C:\\Program Files\\7-Zip\\7z' e $destination -oC:\\projects\\mingwpy32vc100 -y \n\n# Download Mingwpy (vc100) 64-bit\n$source = \"https://bitbucket.org/carlkl/mingw-w64-for-python/downloads/mingwpy_amd64_vc100.7z\"\n$destination = \"C:\\projects\\dl\\mingw_amd64_vc100.7z\"\nif (-not(Test-Path $destination)) {Invoke-WebRequest $source -OutFile $destination}\n& 'C:\\Program Files\\7-Zip\\7z' e $destination -oC:\\projects\\mingwpy64vc100 -y \n\n# Download GLPK\n$source = \"http://ftp.gnu.org/gnu/glpk/glpk-4.60.tar.gz\"\n$destination = \"C:\\projects\\dl\\glpk-4.60.tar.gz\"\nif (-not(Test-Path $destination)) {Invoke-WebRequest $source -OutFile $destination}\n\n# Download GSL\n$source = \"http://mirrors.dotsrc.org/gnu/gsl/gsl-2.2.tar.gz\"\n$destination = \"C:\\projects\\dl\\gsl-2.2.tar.gz\"\nif (-not(Test-Path $destination)) {Invoke-WebRequest $source -OutFile $destination}\n\n# Download FFTW\n$source = \"http://www.fftw.org/fftw-3.3.5.tar.gz\"\n$destination = \"C:\\projects\\dl\\fftw-3.3.5.tar.gz\"\nif (-not(Test-Path $destination)) {Invoke-WebRequest $source -OutFile $destination}\n\n# Download DSDP\n$source = \"http://www.mcs.anl.gov/hs/software/DSDP/DSDP5.8.tar.gz\"\n$destination = \"C:\\projects\\dl\\dsdp-5.8.tar.gz\"\nif (-not(Test-Path $destination)) {Invoke-WebRequest $source -OutFile $destination}"
+- cmd: >-
+    choco install wget
+    if not exist C:\projects\cache mkdir C:\projects\cache
+    cd C:\projects\cache
+    if not exist OpenBLAS-0.2.17_amd64.7z wget https://bitbucket.org/carlkl/mingw-w64-for-python/downloads/OpenBLAS-0.2.17_amd64.7z
+    if not exist openblas mkdir openblas
+    "C:\Program Files\7-Zip\7z" x OpenBLAS-0.2.17_amd64.7z -aoa -oopenblas
+clone_script:
+- cmd: >-
+    git clone https://github.com/cvxopt/cvxopt.git C:\projects\cvxopt
+    cd C:\projects\cvxopt
+    git checkout dev
 environment:
   CVXOPT_BLAS_LIB: openblaspy
   CVXOPT_LAPACK_LIB: openblaspy
-  CVXOPT_BLAS_EXTRA_LINK_ARGS: -lgfortran
-  LIBS_DIR: C:\projects\libs
+  CVXOPT_BLAS_LIB_DIR: C:\projects\cache\openblas\amd64\bin
+  CVXOPT_DATA_FILES: C:\projects\cache\openblas\amd64\bin\libopenblaspy.dll
   matrix:
-  - PYTHON: C:\Python27
-    PYTHON_ARCH: 32
-    PYTHON_VERSION: 27
-    CFLAGS: -IC:/projects/mingwpy32vc90/i686-w64-mingw32/include
-    LDFLAGS: -LC:/projects/mingwpy32vc90/i686-w64-mingw32/lib
-    MINGWPY_DIR: C:\projects\mingwpy32vc90
-    CVXOPT_BLAS_LIB_DIR: C:\projects\openblas32
   - PYTHON: C:\Python27-x64
-    PYTHON_ARCH: 64
     PYTHON_VERSION: 27
-    CFLAGS: -IC:/projects/mingwpy64vc90/i686-w64-mingw32/include
-    LDFLAGS: -LC:/projects/mingwpy64vc90/i686-w64-mingw32/lib
-    MINGWPY_DIR: C:\projects\mingwpy64vc90
-    CVXOPT_BLAS_LIB_DIR: C:\projects\openblas64
   - PYTHON: C:\Python34-x64
-    PYTHON_ARCH: 64
     PYTHON_VERSION: 34
-    CFLAGS: -IC:/projects/mingwpy64vc100/i686-w64-mingw32/include
-    LDFLAGS: -LC:/projects/mingwpy64vc100/i686-w64-mingw32/lib
-    MINGWPY_DIR: C:\projects\mingwpy64vc100
-    CVXOPT_BLAS_LIB_DIR: C:\projects\openblas64
 install:
 - cmd: >-
-    set PATH=%PYTHON%;%PYTHON%\Scripts;%MINGWPY_DIR%;%CVXOPT_BLAS_LIB_DIR%;%LIBS_DIR%
-
-    dir C:\projects\cvxopt
-
+    set PATH=%PYTHON%;%PYTHON%\Scripts;%PATH%
     python --version
-
     python -c "import struct; print(struct.calcsize('P') * 8)"
-
     pip install --disable-pip-version-check --user --upgrade pip
-
     pip install -i https://pypi.anaconda.org/carlkl/simple mingwpy
-
-    pip install wheel
-
-    pip install nose
-
-    pip install coveralls
-cache: C:\projects\dl
+    pip install wheel nose
+cache: C:\projects\cache
 build_script:
 - cmd: >-
-    python setup.py config --compiler=mingw32
-
     python setup.py build --compiler=mingw32
-
     python setup.py install
-
     python setup.py bdist_wheel
 test_script:
-- cmd: "python -c \"from cvxopt import blas,lapack,cholmod,umfpack\"\ncd C:\\projects\\cvxopt\nnosetests"
+- cmd: >-
+    python -c "from cvxopt import blas,lapack,cholmod,umfpack"
+    cd C:\projects\cvxopt
+    nosetests
 artifacts:
 - path: dist/*.whl
