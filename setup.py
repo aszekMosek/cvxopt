@@ -56,14 +56,17 @@ DSDP_LIB_DIR = '/usr/lib'
 # Directory containing dsdp5.h (used only when BUILD_DSDP = 1).
 DSDP_INC_DIR = '/usr/include/dsdp'
 
-# Set to 1 to use external SuiteSparse library
-SUITESPARSE_EXT_LIB = 0
+# Set to 0 to compile SuiteSparse library
+SUITESPARSE_EXT_LIB = 1
 
 # Directory containing external SuiteSparse library
 SUITESPARSE_LIB_DIR = '/usr/local/lib'
 
 # Directory containing SuiteSparse header files
 SUITESPARSE_INC_DIR = '/usr/local/include'
+
+# Directory containing SuiteSparse source (only used if SUITESPARSE_EXT_LIB=0)
+SUITESPARSE_SRC_DIR = 'src/C/SuiteSparse'
 
 # No modifications should be needed below this line.
 
@@ -92,6 +95,7 @@ DSDP_INC_DIR = os.environ.get("CVXOPT_DSDP_INC_DIR",DSDP_INC_DIR)
 SUITESPARSE_EXT_LIB = int(os.environ.get("CVXOPT_SUITESPARSE_EXT_LIB",SUITESPARSE_EXT_LIB))
 SUITESPARSE_LIB_DIR = os.environ.get("CVXOPT_SUITESPARSE_LIB_DIR",SUITESPARSE_LIB_DIR)
 SUITESPARSE_INC_DIR = os.environ.get("CVXOPT_SUITESPARSE_INC_DIR",SUITESPARSE_INC_DIR)
+SUITESPARSE_SRC_DIR = os.environ.get("CVXOPT_SUITESPARSE_SRC_DIR",SUITESPARSE_SRC_DIR)
 
 RT_LIB = ["rt"] if sys.platform.startswith("linux") else []
 
@@ -162,19 +166,19 @@ if SUITESPARSE_EXT_LIB:
         sources = ['src/C/umfpack.c'])
 else:
     umfpack = Extension('umfpack',
-        include_dirs = [ 'src/C/SuiteSparse/UMFPACK/Include',
-            'src/C/SuiteSparse/AMD/Include',
-            'src/C/SuiteSparse/AMD/Source',
-            'src/C/SuiteSparse/SuiteSparse_config' ],
+        include_dirs = [ SUITESPARSE_SRC_DIR + '/UMFPACK/Include',
+            SUITESPARSE_SRC_DIR + '/AMD/Include',
+            SUITESPARSE_SRC_DIR + '/UMFPACK/Source',
+            SUITESPARSE_SRC_DIR + '/AMD/Source',
+            SUITESPARSE_SRC_DIR + '/SuiteSparse_config' ],
         library_dirs = [ BLAS_LIB_DIR ],
         define_macros = MACROS + [('NTIMER', '1'), ('NCHOLMOD', '1')],
         libraries = LAPACK_LIB + BLAS_LIB,
         extra_compile_args = ['-Wno-unknown-pragmas'],
         extra_link_args = BLAS_EXTRA_LINK_ARGS,
         sources = [ 'src/C/umfpack.c',
-            'src/C/SuiteSparse/UMFPACK/Source/umfpack_global.c',
-            'src/C/SuiteSparse/UMFPACK/Source/umfpack_tictoc.c' ] +
-            ['src/C/SuiteSparse/SuiteSparse_config/SuiteSparse_config.c'] +
+            SUITESPARSE_SRC_DIR + '/UMFPACK/Source/umfpack_tictoc.c',
+            SUITESPARSE_SRC_DIR + '/SuiteSparse_config/SuiteSparse_config.c'] +
             glob('src/C/SuiteSparse_cvxopt_extra/umfpack/*'))
 
 # Build for int or long?
@@ -190,23 +194,21 @@ else:
     cholmod = Extension('cholmod',
         library_dirs = [ BLAS_LIB_DIR ],
         libraries = LAPACK_LIB + BLAS_LIB,
-        include_dirs = [ 'src/C/SuiteSparse/CHOLMOD/Include',
-            'src/C/SuiteSparse/COLAMD',
-            'src/C/SuiteSparse/AMD/Include',
-            'src/C/SuiteSparse/COLAMD/Include',
-            'src/C/SuiteSparse/SuiteSparse_config' ],
+        include_dirs = [ SUITESPARSE_SRC_DIR + '/CHOLMOD/Include',
+            SUITESPARSE_SRC_DIR + '/COLAMD',
+            SUITESPARSE_SRC_DIR + '/AMD/Include',
+            SUITESPARSE_SRC_DIR + '/COLAMD/Include',
+            SUITESPARSE_SRC_DIR + '/SuiteSparse_config' ],
         define_macros = MACROS + [('NPARTITION', '1'), ('NTIMER', '1')],
         extra_link_args = BLAS_EXTRA_LINK_ARGS,
         sources = [ 'src/C/cholmod.c' ] +
-            ['src/C/SuiteSparse/AMD/Source/' + s for s in ['amd_global.c',
-                'amd_postorder.c', 'amd_post_tree.c', 'amd_2.c']] +
-            ['src/C/SuiteSparse/COLAMD/Source/' + s for s in ['colamd.c',
-                'colamd_global.c']] +
-            ['src/C/SuiteSparse/SuiteSparse_config/SuiteSparse_config.c'] +
-            glob('src/C/SuiteSparse/CHOLMOD/Core/c*.c') +
-            glob('src/C/SuiteSparse/CHOLMOD/Cholesky/c*.c') +
-            ['src/C/SuiteSparse/CHOLMOD/Check/cholmod_check.c'] +
-            glob('src/C/SuiteSparse/CHOLMOD/Supernodal/c*.c') )
+            [SUITESPARSE_SRC_DIR + '/AMD/Source/' + s for s in ['amd_postorder.c', 'amd_post_tree.c', 'amd_2.c']] +
+            [SUITESPARSE_SRC_DIR + '/COLAMD/Source/colamd.c'] +
+            [SUITESPARSE_SRC_DIR + '/SuiteSparse_config/SuiteSparse_config.c'] +
+            glob(SUITESPARSE_SRC_DIR + '/CHOLMOD/Core/c*.c') +
+            glob(SUITESPARSE_SRC_DIR + '/CHOLMOD/Cholesky/c*.c') +
+            [SUITESPARSE_SRC_DIR + '/CHOLMOD/Check/cholmod_check.c'] +
+            glob(SUITESPARSE_SRC_DIR + '/CHOLMOD/Supernodal/c*.c') )
 
 if SUITESPARSE_EXT_LIB:
     amd = Extension('amd',
@@ -216,11 +218,11 @@ if SUITESPARSE_EXT_LIB:
         sources = ['src/C/amd.c'])
 else:
     amd = Extension('amd',
-        include_dirs = [ 'src/C/SuiteSparse/AMD/Include',
-            'src/C/SuiteSparse/SuiteSparse_config' ],
+        include_dirs = [SUITESPARSE_SRC_DIR + '/AMD/Include',
+            SUITESPARSE_SRC_DIR + '/SuiteSparse_config' ],
         define_macros = MACROS + [('NTIMER', '1')],
-        sources = [ 'src/C/amd.c', 'src/C/SuiteSparse/SuiteSparse_config/SuiteSparse_config.c'] +
-        glob('src/C/SuiteSparse/AMD/Source/*.c') )
+        sources = [ 'src/C/amd.c', SUITESPARSE_SRC_DIR + '/SuiteSparse_config/SuiteSparse_config.c'] +
+        glob(SUITESPARSE_SRC_DIR + '/AMD/Source/*.c') )
 
 misc_solvers = Extension('misc_solvers',
     libraries = LAPACK_LIB + BLAS_LIB,
