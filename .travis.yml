@@ -8,13 +8,13 @@ matrix:
         sudo: required
         language: python
         python: "2.7"
-        env: CVXOPT_BUILD_GSL=1 CVXOPT_BUILD_DSDP=1 CVXOPT_BUILD_FFTW=1 CVXOPT_BUILD_GLPK=1
+        env: CVXOPT_SUITESPARSE_EXT_LIB=0 CVXOPT_BUILD_GSL=1 CVXOPT_BUILD_DSDP=1 CVXOPT_BUILD_FFTW=1 CVXOPT_BUILD_GLPK=1
       - os: linux
         dist: trusty
         sudo: required
         language: python
         python: "3.5"
-        env: CVXOPT_BUILD_GSL=1 CVXOPT_BUILD_DSDP=1 CVXOPT_BUILD_FFTW=1 CVXOPT_BUILD_GLPK=1
+        env: CVXOPT_SUITESPARSE_EXT_LIB=0 CVXOPT_BUILD_GSL=1 CVXOPT_BUILD_DSDP=1 CVXOPT_BUILD_FFTW=1 CVXOPT_BUILD_GLPK=1
       - os: osx
         env: PYVERSION=2.7 CVXOPT_SUITESPARSE_EXT_LIB=0 CVXOPT_BUILD_GSL=1 CVXOPT_BUILD_DSDP=1 CVXOPT_BUILD_FFTW=1 CVXOPT_BUILD_GLPK=1 CVXOPT_BLAS_LIB_DIR=/usr/local/opt/openblas/lib CVXOPT_BLAS_LIB=openblas CVXOPT_LAPACK_LIB=openblas
         language: generic
@@ -26,11 +26,11 @@ matrix:
         language: generic
 
 before_install:
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install python-dev libopenblas-dev liblapack-dev libsuitesparse-dev libfftw3-dev libglpk-dev libdsdp-dev libgsl0-dev; fi
+  - if [[ "$CVXOPT_SUITESPARSE_EXT_LIB" == "0" ]]; then echo "Downloading SuiteSparse source.."; wget http://faculty.cse.tamu.edu/davis/SuiteSparse/SuiteSparse-4.5.3.tar.gz; tar -xf SuiteSparse-4.5.3.tar.gz; export CVXOPT_SUITESPARSE_SRC_DIR=$(pwd)/SuiteSparse; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install python-dev libopenblas-dev liblapack-dev libfftw3-dev libglpk-dev libdsdp-dev libgsl0-dev; fi
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update; brew install homebrew/science/openblas homebrew/science/suite-sparse homebrew/science/glpk dsdp gsl fftw; fi
   - if [[ "$TRAVIS_OS_NAME" == "osx" && "$PYVERSION" == "2.7" ]]; then virtualenv venv -p python; fi
-  - if [[ "$TRAVIS_OS_NAME" == "osx" && "$PYVERSION" == "3.5" ]]; then brew install python3; fi
-  - if [[ "$TRAVIS_OS_NAME" == "osx" && "$PYVERSION" == "3.5" ]]; then virtualenv venv -p python3; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" && "$PYVERSION" == "3.5" ]]; then brew install python3; virtualenv venv -p python3; fi
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then source venv/bin/activate; fi
 
 install:
@@ -42,4 +42,4 @@ script:
   - nosetests --with-coverage --cover-package=cvxopt
 
 after_success:
-  - if [[ "$TRAVIS_OS_NAME" == "linux" && "$TRAVIS_PYTHON_VERSION" == "2.7" ]]; then coveralls; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" && "$PYVERSION" == "2.7" ]]; then coveralls; fi

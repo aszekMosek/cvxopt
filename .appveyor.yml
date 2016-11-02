@@ -10,11 +10,11 @@ init:
 
     cd C:\projects\cache
 
+    if not exist SuiteSparse wget http://faculty.cse.tamu.edu/davis/SuiteSparse/SuiteSparse-4.5.3.tar.gz && "C:\Program Files\7-Zip\7z" x SuiteSparse-4.5.3.tar.gz && "C:\Program Files\7-Zip\7z" x SuiteSparse-4.5.3.tar
+
     if not exist OpenBLAS-0.2.17_amd64.7z wget https://bitbucket.org/carlkl/mingw-w64-for-python/downloads/OpenBLAS-0.2.17_amd64.7z
 
-    if not exist openblas mkdir openblas
-
-    "C:\Program Files\7-Zip\7z" x OpenBLAS-0.2.17_amd64.7z -aoa -oopenblas
+    if not exist openblas mkdir openblas && "C:\Program Files\7-Zip\7z" x OpenBLAS-0.2.17_amd64.7z -aoa -oopenblas
 clone_script:
 - cmd: >-
     git clone https://github.com/cvxopt/cvxopt.git C:\projects\cvxopt
@@ -27,6 +27,8 @@ environment:
   CVXOPT_LAPACK_LIB: openblaspy
   CVXOPT_DATA_FILES: C:\projects\cache\openblas\amd64\bin\libopenblaspy.dll
   CVXOPT_BLAS_LIB_DIR: C:\projects\cache\openblas\amd64\bin
+  CVXOPT_SUITESPARSE_EXT_LIB: 0
+  CVXOPT_SUITESPARSE_SRC_DIR: C:\projects\cache\SuiteSparse
   matrix:
   - PYTHON: C:\Python27-x64
     PYTHON_VERSION: 27
