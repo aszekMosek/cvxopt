@@ -91,15 +91,15 @@ class TestExamples(unittest.TestCase):
         u1 = l1.l1(P,q)
         u2 = l1.l1blas(P,q)
         self.assertAlmostEqualLists(list(u1),list(u2),places=3)
-        try: 
-            import mosek
-        except:
-            print("Skipping MOSEK l1regls solvers (MOSEK module not installed)")
-        else:
-            u2 = l1.l1mosek(P,q)
-            self.assertAlmostEqualLists(list(u1),list(u2),places=3)
-            u2 = l1.l1mosek2(P,q)
-            self.assertAlmostEqualLists(list(u1),list(u2),places=3)
+        #try:
+        #    import mosek
+        #except:
+        #    print("Skipping MOSEK l1regls solvers (MOSEK module not installed)")
+        #else:
+        #    u2 = l1.l1mosek(P,q)
+        #    self.assertAlmostEqualLists(list(u1),list(u2),places=3)
+        #    u2 = l1.l1mosek2(P,q)
+        #    self.assertAlmostEqualLists(list(u1),list(u2),places=3)
 
     def test_l1regls(self):
         from cvxopt import normal, setseed
@@ -108,20 +108,19 @@ class TestExamples(unittest.TestCase):
         m,n = 250,500
         A = normal(m,n)
         b = normal(m,1)
-        
+
         x = l1regls.l1regls(A,b)
         # Check optimality conditions (list should be empty, e.g., False)
-        self.assertFalse([t for t in zip(A.T*(A*x-b),x) if abs(t[1])>1e-6 and abs(t[0]) > 1.0]) 
-        
-        try:
-            import mosek
-        except:
-            print("Skipping MOSEK l1regls solvers (MOSEK module not installed)")
-        else:
-            x = l1regls.l1regls_mosek(A,b)
-            self.assertFalse([t for t in zip(A.T*(A*x-b),x) if abs(t[1])>1e-6 and abs(t[0]) > 1.0]) 
-            x = l1regls.l1regls_mosek2(A,b)
-            self.assertFalse([t for t in zip(A.T*(A*x-b),x) if abs(t[1])>1e-6 and abs(t[0]) > 1.0]) 
+        self.assertFalse([t for t in zip(A.T*(A*x-b),x) if abs(t[1])>1e-6 and abs(t[0]) > 1.0])
+        #try:
+        #    import mosek
+        #except:
+        #    print("Skipping MOSEK l1regls solvers (MOSEK module not installed)")
+        #else:
+        #    x = l1regls.l1regls_mosek(A,b)
+        #    self.assertFalse([t for t in zip(A.T*(A*x-b),x) if abs(t[1])>1e-6 and abs(t[0]) > 1.0])
+        #    x = l1regls.l1regls_mosek2(A,b)
+        #    self.assertFalse([t for t in zip(A.T*(A*x-b),x) if abs(t[1])>1e-6 and abs(t[0]) > 1.0])
 
 if __name__ == '__main__':
     unittest.main()

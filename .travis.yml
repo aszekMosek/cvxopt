@@ -8,7 +8,7 @@ matrix:
         sudo: required
         language: python
         python: "2.7"
-        env: CVXOPT_SUITESPARSE_EXT_LIB=0 CVXOPT_BUILD_GSL=1 CVXOPT_BUILD_DSDP=1 CVXOPT_BUILD_FFTW=1 CVXOPT_BUILD_GLPK=1
+        env: COVERALLS=1 CVXOPT_SUITESPARSE_EXT_LIB=0 CVXOPT_BUILD_GSL=1 CVXOPT_BUILD_DSDP=1 CVXOPT_BUILD_FFTW=1 CVXOPT_BUILD_GLPK=1
       - os: linux
         dist: trusty
         sudo: required
@@ -42,4 +42,4 @@ script:
   - nosetests --with-coverage --cover-package=cvxopt
 
 after_success:
-  - if [[ "$TRAVIS_OS_NAME" == "linux" && "$PYVERSION" == "2.7" ]]; then coveralls; fi
+  - if [ $COVERALLS ]; then coveralls; fi
