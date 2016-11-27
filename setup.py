@@ -3,8 +3,7 @@ try:
 except ImportError:
     from distutils.core import setup, Extension
 from glob import glob
-import os
-import sys
+import os, sys, platform
 import versioneer
 
 # Modifiy this if BLAS and LAPACK libraries are not in /usr/lib.
@@ -56,17 +55,23 @@ DSDP_LIB_DIR = '/usr/lib'
 # Directory containing dsdp5.h (used only when BUILD_DSDP = 1).
 DSDP_INC_DIR = '/usr/include/dsdp'
 
-# Set to 0 to compile SuiteSparse library
-SUITESPARSE_EXT_LIB = 1
+# Guess SUITESPARSE_LIB_DIR and SUITESPARSE_INC_DIR
+lnx_dist = platform.linux_distribution()
+if lnx_dist[0] == "Ubuntu" and lnx_dist[1] >= "16":
+    # Ubuntu 16.04 or later
+    SUITESPARSE_LIB_DIR = "/usr/lib/x86_64-linux-gnu"
+    SUITESPARSE_INC_DIR = "/usr/include/suitesparse"
+elif platform.platform().startswith("Darwin"):
+    # macOS
+    SUITESPARSE_LIB_DIR = '/usr/local/lib'
+    SUITESPARSE_INC_DIR = '/usr/local/include'
+else:
+    # default
+    SUITESPARSE_LIB_DIR = '/usr/lib'
+    SUITESPARSE_INC_DIR = '/usr/include'
 
-# Directory containing external SuiteSparse library
-SUITESPARSE_LIB_DIR = '/usr/local/lib'
-
-# Directory containing SuiteSparse header files
-SUITESPARSE_INC_DIR = '/usr/local/include'
-
-# Directory containing SuiteSparse source (only used if SUITESPARSE_EXT_LIB=0)
-SUITESPARSE_SRC_DIR = 'src/C/SuiteSparse'
+# Directory containing SuiteSparse source
+SUITESPARSE_SRC_DIR = ''
 
 # No modifications should be needed below this line.
 
@@ -92,7 +97,6 @@ GLPK_INC_DIR = os.environ.get("CVXOPT_GLPK_INC_DIR",GLPK_INC_DIR)
 BUILD_DSDP = int(os.environ.get("CVXOPT_BUILD_DSDP",BUILD_DSDP))
 DSDP_LIB_DIR = os.environ.get("CVXOPT_DSDP_LIB_DIR",DSDP_LIB_DIR)
 DSDP_INC_DIR = os.environ.get("CVXOPT_DSDP_INC_DIR",DSDP_INC_DIR)
-SUITESPARSE_EXT_LIB = int(os.environ.get("CVXOPT_SUITESPARSE_EXT_LIB",SUITESPARSE_EXT_LIB))
 SUITESPARSE_LIB_DIR = os.environ.get("CVXOPT_SUITESPARSE_LIB_DIR",SUITESPARSE_LIB_DIR)
 SUITESPARSE_INC_DIR = os.environ.get("CVXOPT_SUITESPARSE_INC_DIR",SUITESPARSE_INC_DIR)
 SUITESPARSE_SRC_DIR = os.environ.get("CVXOPT_SUITESPARSE_SRC_DIR",SUITESPARSE_SRC_DIR)
@@ -158,7 +162,7 @@ lapack = Extension('lapack', libraries = LAPACK_LIB + BLAS_LIB,
     extra_link_args = BLAS_EXTRA_LINK_ARGS,
     sources = ['src/C/lapack.c'] )
 
-if SUITESPARSE_EXT_LIB:
+if not SUITESPARSE_SRC_DIR:
     umfpack = Extension('umfpack',
         libraries = ['umfpack','cholmod','amd','colamd','suitesparseconfig'] + LAPACK_LIB + BLAS_LIB + RT_LIB,
         include_dirs = [SUITESPARSE_INC_DIR],
@@ -184,7 +188,7 @@ else:
 # Build for int or long?
 if sys.maxsize > 2**31: MACROS += [('DLONG',None)]
 
-if SUITESPARSE_EXT_LIB:
+if not SUITESPARSE_SRC_DIR:
     cholmod = Extension('cholmod',
         libraries = ['cholmod','colamd','amd','suitesparseconfig'] + LAPACK_LIB + BLAS_LIB + RT_LIB,
         include_dirs = [SUITESPARSE_INC_DIR],
@@ -210,7 +214,7 @@ else:
             [SUITESPARSE_SRC_DIR + '/CHOLMOD/Check/cholmod_check.c'] +
             glob(SUITESPARSE_SRC_DIR + '/CHOLMOD/Supernodal/c*.c') )
 
-if SUITESPARSE_EXT_LIB:
+if not SUITESPARSE_SRC_DIR:
     amd = Extension('amd',
         libraries = ['amd','suitesparseconfig'] + RT_LIB,
         include_dirs = [SUITESPARSE_INC_DIR],

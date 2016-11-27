@@ -27,7 +27,6 @@ environment:
   CVXOPT_LAPACK_LIB: openblaspy
   CVXOPT_DATA_FILES: C:\projects\cache\openblas\amd64\bin\libopenblaspy.dll
   CVXOPT_BLAS_LIB_DIR: C:\projects\cache\openblas\amd64\bin
-  CVXOPT_SUITESPARSE_EXT_LIB: 0
   CVXOPT_SUITESPARSE_SRC_DIR: C:\projects\cache\SuiteSparse
   matrix:
   - PYTHON: C:\Python27-x64
