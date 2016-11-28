@@ -70,7 +70,7 @@ script can be modified:
 * SUITESPARSE_INC_DIR: the directory containing SuiteSparse header files.
 * SUITESPARSE_SRC_DIR: the directory containing SuiteSparse source. The
   variables SUITESPARSE_LIB_DIR and SUITESPARSE_INC_DIR are ignored and
-  relevant parts of SuiteSparse are build from source when
+  relevant parts of SuiteSparse are built from source when
   SUITESPARSE_SRC_DIR is specified.
 
 Each of the variables can be overridden by specifying an environment variable
